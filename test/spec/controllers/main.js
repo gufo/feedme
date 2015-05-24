@@ -6,17 +6,34 @@ describe('Controller: MainCtrl', function () {
   beforeEach(module('feedmeApp'));
 
   var MainCtrl,
-    scope;
+    scope,
+    $httpBackend;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope) {
+  beforeEach(inject(function ($controller, $rootScope, $injector) {
     scope = $rootScope.$new();
+    $httpBackend = $injector.get('$httpBackend');
     MainCtrl = $controller('MainCtrl', {
       $scope: scope
     });
   }));
 
-  it('should expose a lunch venue (hard-coded)', function () {
-    expect(scope.venue).toEqual({name: 'Loungen'});
+  it('should fetch a list of venues and expose the first one', function () {
+    $httpBackend.expectGET('/places/nearby.json').respond(200, {
+      'response': {
+        'groups': [ {
+          'items': [
+          {
+            'venue': { 'name': 'Lounge Lizards' }
+          },
+          {
+            'venue': { 'name': 'Kitchen Kittens' }
+          }]
+        } ]
+      }
+    });
+    $httpBackend.flush();
+
+    expect(scope.venue).toEqual({name: 'Lounge Lizards'});
   });
 });
