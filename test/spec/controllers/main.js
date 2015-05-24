@@ -18,22 +18,25 @@ describe('Controller: MainCtrl', function () {
     });
   }));
 
-  it('should fetch a list of venues and expose the first one', function () {
+  function mockResponse() {
     $httpBackend.expectGET('/places/nearby.json').respond(200, {
       'response': {
         'groups': [ {
           'items': [
-          {
-            'venue': { 'name': 'Lounge Lizards' }
-          },
-          {
-            'venue': { 'name': 'Kitchen Kittens' }
-          }]
+            {
+              'venue': { 'name': 'Lounge Lizards' }
+            },
+            {
+              'venue': { 'name': 'Kitchen Kittens' }
+            }]
         } ]
       }
     });
     $httpBackend.flush();
+  }
 
+  it('should fetch a list of venues and expose the first one', function () {
+    mockResponse();
     expect(scope.venue).toEqual({name: 'Lounge Lizards'});
   });
 });
