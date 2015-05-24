@@ -35,8 +35,15 @@ describe('Controller: MainCtrl', function () {
     $httpBackend.flush();
   }
 
-  it('should fetch a list of venues and expose the first one', function () {
+  it('should fetch a list of venues and expose a random one (low value)', function () {
+    spyOn(Math, 'random').and.returnValue(0.49);
     mockResponse();
     expect(scope.venue).toEqual({name: 'Lounge Lizards'});
+  });
+
+  it('should fetch a list of venues and expose a random one (high value)', function () {
+    spyOn(Math, 'random').and.returnValue(0.51);
+    mockResponse();
+    expect(scope.venue).toEqual({name: 'Kitchen Kittens'});
   });
 });
